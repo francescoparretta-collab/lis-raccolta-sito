@@ -9,8 +9,11 @@
      tutto, altrimenti il testo chiaro sparisce sul fondo chiaro. I contrasti
      sono tenuti alti apposta -- questo link si apre spesso fuori casa, con
      il sole sullo schermo. */
-  :root { --sfondo:#dff3f3; --carta:#ffffff; --testo:#0d2b2e; --tenue:#4d7276;
-          --ok:#0f9d58; --attesa:#b45309; --acc:#0e8f9e; --bordo:#b9dfe0; }
+  /* 2/10/2026, l'utente: "sito dovrebbe visibile piu' chiaro perche' vedo un po' simile colori". Bordi, barre e zone avevano un contrasto di 1,1-1,2:1
+     (quasi invisibili). Adesso: testo quasi nero (14:1), bottoni scuri con testo bianco (6,7:1), bordi SCURI di 2 px su ogni riquadro, barre e scala
+     con contorno. Le zone si distinguono per il contorno, non solo per il colore. */
+  :root { --sfondo:#cfe8ea; --carta:#ffffff; --testo:#06191b; --tenue:#35575b;
+          --ok:#0b6b36; --attesa:#b45309; --acc:#0a6572; --bordo:#4f8a90; }
   * { box-sizing:border-box; -webkit-tap-highlight-color:transparent }
   body { margin:0; background:var(--sfondo); color:var(--testo);
          font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
@@ -32,7 +35,9 @@
     #s-registra .col-testa { grid-column:1 / span 2; grid-row:1; text-align:center }
     #s-registra .col-video { grid-column:1; grid-row:2 }
     #s-registra .col-comandi { grid-column:2; grid-row:2 }
-    #s-registra .frase { font-size:38px; line-height:1.2 }   /* la frase da segnare: grande, la si legge da lontano */
+    #s-registra .frase { font-size:38px; line-height:1.2; gap:10px }   /* la frase da segnare: grande, la si legge da lontano */
+    #s-registra .frase span { font-size:34px; padding:8px 16px }
+    #s-registra .frase span.domanda { font-size:28px }
     #s-registra .col-testa .riquadro { margin:6px 0 }
     #s-registra .stato { font-size:20px }
   }
@@ -41,23 +46,24 @@
   p.tenue { color:var(--tenue); font-size:15px; line-height:1.5 }
   input, button { font:inherit; border-radius:12px; border:none }
   input[type=text], input:not([type]) { width:100%; padding:14px; background:var(--carta); color:var(--testo);
-          border:1px solid var(--bordo); margin:10px 0 }
+          border:2px solid var(--bordo); margin:10px 0 }
   button { width:100%; padding:16px; background:var(--acc); color:#ffffff;
-           font-weight:600; margin-top:10px }
-  button:disabled { opacity:.4 }
-  button.secondario { background:var(--carta); color:var(--acc); border:1px solid var(--bordo) }
+           font-weight:700; margin-top:10px; border:2px solid #064650 }
+  button:disabled { opacity:.45 }
+  button.secondario { background:var(--carta); color:var(--acc); border:2px solid var(--acc) }
+  button:focus-visible, input:focus-visible { outline:3px solid #b45309; outline-offset:2px }
   .riquadro { background:var(--carta); border-radius:14px; padding:14px; margin:12px 0;
-              border:1px solid var(--bordo) }
+              border:2px solid var(--bordo); box-shadow:0 2px 0 rgba(6,25,27,.12) }
   .segno { font-size:34px; font-weight:700; text-align:center; margin:6px 0 }
   /* La frase: un riquadro per segno, cosi' si vede dove finisce uno e comincia l'altro */
   .frase { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin:8px 0 }
   .frase span { font-size:22px; font-weight:700; padding:6px 10px; border-radius:10px;
-                background:#e8f6f6; border:1px solid var(--bordo) }
-  .frase span.domanda { background:#fff4e0; border-color:#f3d9ae; color:#8a4b08; font-size:18px }
-  .conteggio { text-align:center; color:var(--tenue); font-size:16px }
-  .barra { height:10px; background:#c3e4e5; border-radius:6px; overflow:hidden; margin:10px 0 }
+                background:#ffffff; border:2px solid var(--acc); color:var(--testo) }
+  .frase span.domanda { background:#fff1d6; border-color:#b45309; color:#6b3306; font-size:18px }
+  .conteggio { text-align:center; color:var(--tenue); font-size:16px; font-weight:600 }
+  .barra { height:14px; background:#ffffff; border:2px solid var(--bordo); border-radius:8px; overflow:hidden; margin:10px 0 }
   .barra > i { display:block; height:100%; background:var(--ok); width:0; transition:width .15s }
-  video { width:100%; display:block; border-radius:14px; background:#000; transform:scaleX(-1) }
+  video { width:100%; display:block; border-radius:14px; background:#000; transform:scaleX(-1); border:3px solid var(--acc) }
   /* Lo scheletro si disegna sopra il video. Il video e' specchiato dal CSS,
      e la tela di lavoro lo e' nei pixel: le due immagini coincidono, quindi
      qui le coordinate si usano com'escono da MediaPipe, senza specchiare. */
@@ -66,11 +72,11 @@
                          border-radius:14px; pointer-events:none }
   /* pre-line: i messaggi con l'a capo scritto nel testo vanno a capo davvero,
      invece di diventare una riga sola lunghissima */
-  .stato { text-align:center; padding:10px; font-weight:600; white-space:pre-line }
+  .stato { text-align:center; padding:10px; font-weight:700; white-space:pre-line }
   .privacy { font-size:13px; color:var(--tenue); border-left:3px solid var(--acc);
              padding-left:12px; margin:18px 0 }
-  .avviso { background:#fff4e0; color:#8a4b08; padding:12px; border-radius:10px;
-            font-size:14px; margin:12px 0; border:1px solid #f3d9ae }
+  .avviso { background:#fff1d6; color:#6b3306; padding:12px; border-radius:10px;
+            font-size:15px; margin:12px 0; border:2px solid #b45309 }
   .guida-foto { width:100%; border-radius:14px; display:block; margin:10px 0 }
   /* Il consenso: testo corto, frasi brevi. La casella e' grande, si tocca bene col dito. */
   .consenso { font-size:15px; line-height:1.55 }
@@ -81,16 +87,17 @@
   label.spunta input { width:26px; height:26px; flex:none; margin:0; accent-color:var(--acc) }
   /* La barra della distanza: il verde e' la zona giusta, il trattino e' dove sei tu */
   .posizione { margin:4px 0 8px }
-  .scala { position:relative; height:14px; background:#f3d9ae; border-radius:7px }
-  .scala .zona { position:absolute; top:0; bottom:0; left:31.8%; width:36.4%;
-                 background:#9fdcb8; border-radius:7px }
-  .scala b { position:absolute; top:-4px; width:6px; height:22px; border-radius:3px;
-             background:var(--attesa); display:none }
-  .pos-etichette { display:flex; justify-content:space-between; font-size:12px;
-                   color:var(--tenue); margin-top:3px }
+  .scala { position:relative; height:18px; background:#f6d9a0; border:2px solid #8a5a12; border-radius:9px }
+  .scala .zona { position:absolute; top:-2px; bottom:-2px; left:31.8%; width:36.4%;
+                 background:#2fa66a; border:2px solid #0b5d33; border-radius:9px }
+  .scala b { position:absolute; top:-7px; width:8px; height:28px; border-radius:4px;
+             background:var(--attesa); display:none;
+             border:2px solid #ffffff; box-shadow:0 0 0 2px #06191b }   /* il trattino ha il contorno bianco e nero: si vede sul verde e sul beige */
+  .pos-etichette { display:flex; justify-content:space-between; font-size:13px; font-weight:600;
+                   color:var(--testo); margin-top:3px }
   #pos-testo { text-align:center; font-size:14px; font-weight:600; margin-top:2px }
   .parte { display:flex; flex-direction:column }
-  .parte .quanto { color:var(--tenue); font-size:14px }
+  .parte .quanto { color:var(--tenue); font-size:15px; font-weight:600 }
 </style>
 </head>
 <body>
@@ -270,6 +277,6 @@
   <button id="btn-ancora" class="secondario">Registra ancora</button>
 </div>
 
-<script type="module" src="raccolta.js?v=2610011837"></script>
+<script type="module" src="raccolta.js?v=2610011842"></script>
 </body>
 </html>
