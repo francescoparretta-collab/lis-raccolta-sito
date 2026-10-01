@@ -16,6 +16,16 @@
          font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
   .schermo { display:none; padding:20px; max-width:560px; margin:0 auto }
   .schermo.attivo { display:block }
+  /* Schermo largo (PC, telefono orizzontale): video a sinistra, frase + messaggi + pulsanti in alto a destra, tutto visibile senza scorrere. */
+  @media (min-width: 900px) {
+    #s-registra.attivo { max-width:1120px; display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);
+                         grid-template-rows:auto 1fr; column-gap:28px; align-items:start }
+    #s-registra .col-video { grid-column:1; grid-row:1 / span 2 }
+    #s-registra .col-testa { grid-column:2; grid-row:1 }
+    #s-registra .col-comandi { grid-column:2; grid-row:2 }
+    #s-registra .frase { font-size:32px; line-height:1.25 }   /* la frase da segnare: grande, la si legge da lontano */
+    #s-registra .stato { font-size:20px }
+  }
   h1 { font-size:22px; margin:0 0 6px }
   h2 { font-size:18px; margin:0 0 4px }
   p.tenue { color:var(--tenue); font-size:15px; line-height:1.5 }
@@ -184,6 +194,9 @@
 </div>
 
 <div id="s-registra" class="schermo">
+  <!-- 2/10/2026, l'utente: "sotto non vedo bene, meglio sopra destra". Tre blocchi: sul telefono (stretto) restano uno sotto l'altro come prima;
+       su uno schermo largo (PC, telefono orizzontale) il VIDEO sta a sinistra e frase, messaggi e pulsanti stanno in ALTO A DESTRA, senza scorrere. -->
+  <div class="col-testa">
   <!-- segni singoli -->
   <div class="riquadro" id="box-segno">
     <div class="conteggio"><span id="idx-segno"></span></div>
@@ -203,6 +216,8 @@
     Con <b>?</b> è una domanda: fai il viso della domanda.
     Comincia da sola quando alzi le mani.
     Alla fine <b>abbassa le mani</b>.</p>
+  </div>
+  <div class="col-video">
   <!-- Il video con sopra lo scheletro della mano. Vedere le linee verdi e i
        pallini rossi e' la prova immediata che il riconoscimento sta
        funzionando: senza, non si capirebbe se il problema e' la luce, la
@@ -217,6 +232,8 @@
     <div class="pos-etichette"><span>lontano</span><span>vicino</span></div>
     <div id="pos-testo"></div>
   </div>
+  </div>
+  <div class="col-comandi">
   <div class="stato" id="stato">Avvio…</div>
   <div class="barra"><i id="barra-seq" style="background:var(--attesa)"></i></div>
   <button id="btn-rifai" class="secondario" style="display:none" disabled>Rifai l'ultima</button>
@@ -224,6 +241,7 @@
   <!-- Prima, chi si stancava a meta' e chiudeva la pagina perdeva tutto.
        Con questo puo' fermarsi quando vuole e mandare lo stesso. -->
   <button id="btn-finito" class="secondario">Ho finito, manda</button>
+  </div>
 </div>
 
 <div id="s-fine" class="schermo">
@@ -242,6 +260,6 @@
   <button id="btn-ancora" class="secondario">Registra ancora</button>
 </div>
 
-<script type="module" src="raccolta.js?v=2610011808"></script>
+<script type="module" src="raccolta.js?v=2610011821"></script>
 </body>
 </html>
