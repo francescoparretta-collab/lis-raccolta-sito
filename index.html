@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LIS Bridge — registrazione segni</title>
+<style>
+  /* Turchese chiaro. La pagina era scura: ribaltandola bisogna ribaltare
+     tutto, altrimenti il testo chiaro sparisce sul fondo chiaro. I contrasti
+     sono tenuti alti apposta -- questo link si apre spesso fuori casa, con
+     il sole sullo schermo. */
+  :root { --sfondo:#dff3f3; --carta:#ffffff; --testo:#0d2b2e; --tenue:#4d7276;
+          --ok:#0f9d58; --attesa:#b45309; --acc:#0e8f9e; --bordo:#b9dfe0; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent }
+  body { margin:0; background:var(--sfondo); color:var(--testo);
+         font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .schermo { display:none; padding:20px; max-width:560px; margin:0 auto }
+  .schermo.attivo { display:block }
+  h1 { font-size:22px; margin:0 0 6px }
+  h2 { font-size:18px; margin:0 0 4px }
+  p.tenue { color:var(--tenue); font-size:15px; line-height:1.5 }
+  input, button { font:inherit; border-radius:12px; border:none }
+  input[type=text], input:not([type]) { width:100%; padding:14px; background:var(--carta); color:var(--testo);
+          border:1px solid var(--bordo); margin:10px 0 }
+  button { width:100%; padding:16px; background:var(--acc); color:#ffffff;
+           font-weight:600; margin-top:10px }
+  button:disabled { opacity:.4 }
+  button.secondario { background:var(--carta); color:var(--acc); border:1px solid var(--bordo) }
+  .riquadro { background:var(--carta); border-radius:14px; padding:14px; margin:12px 0;
+              border:1px solid var(--bordo) }
+  .segno { font-size:34px; font-weight:700; text-align:center; margin:6px 0 }
+  /* La frase: un riquadro per segno, cosi' si vede dove finisce uno e comincia l'altro */
+  .frase { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin:8px 0 }
+  .frase span { font-size:22px; font-weight:700; padding:6px 10px; border-radius:10px;
+                background:#e8f6f6; border:1px solid var(--bordo) }
+  .frase span.domanda { background:#fff4e0; border-color:#f3d9ae; color:#8a4b08; font-size:18px }
+  .conteggio { text-align:center; color:var(--tenue); font-size:16px }
+  .barra { height:10px; background:#c3e4e5; border-radius:6px; overflow:hidden; margin:10px 0 }
+  .barra > i { display:block; height:100%; background:var(--ok); width:0; transition:width .15s }
+  video { width:100%; display:block; border-radius:14px; background:#000; transform:scaleX(-1) }
+  /* Lo scheletro si disegna sopra il video. Il video e' specchiato dal CSS,
+     e la tela di lavoro lo e' nei pixel: le due immagini coincidono, quindi
+     qui le coordinate si usano com'escono da MediaPipe, senza specchiare. */
+  .inquadratura { position:relative; line-height:0 }
+  .inquadratura canvas { position:absolute; inset:0; width:100%; height:100%;
+                         border-radius:14px; pointer-events:none }
+  /* pre-line: i messaggi con l'a capo scritto nel testo vanno a capo davvero,
+     invece di diventare una riga sola lunghissima */
+  .stato { text-align:center; padding:10px; font-weight:600; white-space:pre-line }
+  .privacy { font-size:13px; color:var(--tenue); border-left:3px solid var(--acc);
+             padding-left:12px; margin:18px 0 }
+  .avviso { background:#fff4e0; color:#8a4b08; padding:12px; border-radius:10px;
+            font-size:14px; margin:12px 0; border:1px solid #f3d9ae }
+  .guida-foto { width:100%; border-radius:14px; display:block; margin:10px 0 }
+  /* Il consenso: testo corto, frasi brevi. La casella e' grande, si tocca bene col dito. */
+  .consenso { font-size:15px; line-height:1.55 }
+  .consenso ul { margin:6px 0 0; padding-left:20px }
+  .consenso li { margin:4px 0 }
+  label.spunta { display:flex; gap:12px; align-items:flex-start; font-size:15px;
+                 line-height:1.45; margin-top:12px; cursor:pointer }
+  label.spunta input { width:26px; height:26px; flex:none; margin:0; accent-color:var(--acc) }
+  /* La barra della distanza: il verde e' la zona giusta, il trattino e' dove sei tu */
+  .posizione { margin:4px 0 8px }
+  .scala { position:relative; height:14px; background:#f3d9ae; border-radius:7px }
+  .scala .zona { position:absolute; top:0; bottom:0; left:31.8%; width:36.4%;
+                 background:#9fdcb8; border-radius:7px }
+  .scala b { position:absolute; top:-4px; width:6px; height:22px; border-radius:3px;
+             background:var(--attesa); display:none }
+  .pos-etichette { display:flex; justify-content:space-between; font-size:12px;
+                   color:var(--tenue); margin-top:3px }
+  #pos-testo { text-align:center; font-size:14px; font-weight:600; margin-top:2px }
+  .parte { display:flex; flex-direction:column }
+  .parte .quanto { color:var(--tenue); font-size:14px }
+</style>
+</head>
+<body>
+
+<div id="s-inizio" class="schermo attivo">
+  <h1>Grazie per l'aiuto!</h1>
+  <p class="tenue">Un computer sta imparando la LIS.<br>
+     Con i tuoi segni lo aiuti a riconoscere <b>tante persone</b>, non una sola.</p>
+
+  <div class="privacy">
+    <b>Il video resta sul tuo dispositivo.</b><br>
+    La pagina rileva solo la posizione di mani, viso e spalle.<br>
+    Nessuna immagine viene inviata.
+  </div>
+
+  <!-- Il numero lo scrive raccolta.js: la pagina ha piu' elenchi e scritto a
+       mano restava sempre "9". -->
+  <p class="tenue"><b id="quanti">&nbsp;</b><br>
+     <span id="durata">&nbsp;</span><br>
+     Puoi fermarti quando vuoi.</p>
+
+  <!-- Il consenso (27/9/2026), prima di tutto il resto. Frasi corte: per molti sordi
+       l'italiano e' la seconda lingua. -->
+  <div class="riquadro consenso">
+    <h2>Prima di cominciare</h2>
+    <ul>
+      <li><b>Chi raccoglie:</b> Francesco Parretta, progetto LIS Bridge.</li>
+      <li><b>Perché:</b> insegnare a un computer a riconoscere la LIS.</li>
+      <li><b>Cosa parte:</b> solo numeri. Sono le posizioni di mani, viso (bocca,
+          occhi, sopracciglia) e spalle. Niente video, niente foto.</li>
+      <li><b>Il nome:</b> puoi usare un soprannome.</li>
+      <li><b>Puoi fermarti</b> quando vuoi.</li>
+      <li><b>Puoi chiedere di cancellare</b> i tuoi dati: scrivi a Francesco
+          il nome che hai usato qui.</li>
+    </ul>
+    <label class="spunta">
+      <input type="checkbox" id="consenso">
+      <span>Ho letto. Ho almeno 18 anni. Sono d'accordo che i miei segni
+            siano usati per questo progetto.</span>
+    </label>
+  </div>
+
+  <input id="nome" placeholder="Il tuo nome o un soprannome" autocomplete="off"
+         autocapitalize="off" spellcheck="false">
+  <p class="tenue" style="font-size:13px">Solo lettere e numeri. Senza spazi.</p>
+
+  <button id="btn-inizia" disabled>Comincia</button>
+
+  <!-- Il titolo dice QUANDO guardare l'immagine; l'immagine, che ha gia' il
+       suo titolo dentro, dice COSA fare. -->
+  <h1 style="font-size:18px;margin-top:26px">Come metterti</h1>
+  <p class="tenue" style="font-size:14px;margin-top:0">Se qualcosa non va,
+     la pagina te lo dice.</p>
+
+  <!-- Una sola immagine, telefono e computer affiancati. Si puo' toccare
+       per aprirla intera e ingrandirla: sullo schermo del telefono le
+       scritte piccole altrimenti non si leggerebbero. -->
+  <a href="immagini/guida.jpg" target="_blank" rel="noopener">
+    <img class="guida-foto" src="immagini/guida.jpg"
+         alt="Come posizionare lo smartphone e il computer: appoggiati in alto,
+              webcam all'altezza degli occhi, viso e mani dentro
+              l'inquadratura, luce davanti">
+  </a>
+  <p class="tenue" style="font-size:13px;margin-top:0">Tocca o clicca
+     l'immagine per ingrandirla.</p>
+
+  <!-- Solo quello che l'immagine NON puo' dire: il PERCHE' non si tiene in
+       mano, e come si deve segnare. -->
+  <h1 style="font-size:18px;margin-top:26px">Durante la registrazione</h1>
+  <div class="riquadro" style="font-size:15px;line-height:1.55;margin-top:8px">
+    <b>Tieni entrambe le mani libere.</b><br>
+    Non tenere il telefono in mano. Telefono in verticale.<br><br>
+    <b>Segna come fai normalmente.</b><br>
+    Usa il tuo labiale e le tue espressioni.<br>
+    Non rallentare.<br>
+    Non esagerare i movimenti.<br><br>
+    <b>Maglietta a tinta unita</b>, meglio se diversa dal colore della pelle.
+  </div>
+
+</div>
+
+<!-- Il menu delle tre parti (solo per i docenti; ?nuovi e ?difficili vanno dritti ai segni).
+     Ogni parte si puo' fare quando si vuole, anche un altro giorno: il numero di quelle fatte
+     resta su questo dispositivo. -->
+<div id="s-menu" class="schermo">
+  <h1>Scegli una parte</h1>
+  <p class="tenue" style="margin-top:0">Puoi farle in qualsiasi ordine.
+     Puoi fermarti e tornare qui quando vuoi.</p>
+  <div class="avviso" id="m-messaggio" style="display:none"></div>
+
+  <div class="riquadro parte">
+    <h2>1. Frasi</h2>
+    <span class="quanto">Frasi corte in LIS. Circa 20 minuti.</span>
+    <span class="quanto" id="m-frasi"></span>
+    <button id="btn-p-frasi">Frasi</button>
+  </div>
+  <div class="riquadro parte">
+    <h2>2. Segni singoli</h2>
+    <span class="quanto">Un segno alla volta, 3 volte. Circa 10 minuti.</span>
+    <span class="quanto" id="m-segni"></span>
+    <button id="btn-p-segni">Segni singoli</button>
+  </div>
+  <div class="riquadro parte">
+    <h2>3. Alfabeto</h2>
+    <span class="quanto">L'alfabeto in tre pezzi, 2 volte. Circa 2 minuti.</span>
+    <span class="quanto" id="m-alfabeto"></span>
+    <button id="btn-p-alfabeto">Alfabeto</button>
+  </div>
+  <button id="btn-menu-fine" class="secondario">Ho finito</button>
+</div>
+
+<div id="s-registra" class="schermo">
+  <!-- segni singoli -->
+  <div class="riquadro" id="box-segno">
+    <div class="conteggio"><span id="idx-segno"></span></div>
+    <div class="segno" id="nome-segno">—</div>
+    <div class="barra"><i id="barra-segno"></i></div>
+    <div class="conteggio" id="conteggio">0 / 10</div>
+  </div>
+  <!-- frasi e alfabeto -->
+  <div class="riquadro" id="box-frase" style="display:none">
+    <div class="conteggio"><span id="idx-frase"></span></div>
+    <div class="frase" id="frase"></div>
+    <div class="barra"><i id="barra-frasi"></i></div>
+    <div class="conteggio" id="conteggio-frasi"></div>
+  </div>
+  <p class="tenue" id="istruzioni-frase" style="display:none;font-size:14px;margin:0 0 8px">
+    Segna la frase in modo naturale, nell'ordine scritto.
+    Con <b>?</b> è una domanda: fai il viso della domanda.
+    Comincia da sola quando alzi le mani.
+    Alla fine <b>abbassa le mani</b>.</p>
+  <!-- Il video con sopra lo scheletro della mano. Vedere le linee verdi e i
+       pallini rossi e' la prova immediata che il riconoscimento sta
+       funzionando: senza, non si capirebbe se il problema e' la luce, la
+       distanza o l'inquadratura. -->
+  <div class="inquadratura">
+    <video id="video" playsinline muted></video>
+    <canvas id="scheletro"></canvas>
+  </div>
+  <!-- la distanza: il trattino deve stare nel verde -->
+  <div class="posizione">
+    <div class="scala"><i class="zona"></i><b id="pos-segno"></b></div>
+    <div class="pos-etichette"><span>lontano</span><span>vicino</span></div>
+    <div id="pos-testo"></div>
+  </div>
+  <div class="stato" id="stato">Avvio…</div>
+  <div class="barra"><i id="barra-seq" style="background:var(--attesa)"></i></div>
+  <button id="btn-rifai" class="secondario" style="display:none" disabled>Rifai l'ultima</button>
+  <button id="btn-salta" class="secondario">Salta</button>
+  <!-- Prima, chi si stancava a meta' e chiudeva la pagina perdeva tutto.
+       Con questo puo' fermarsi quando vuole e mandare lo stesso. -->
+  <button id="btn-finito" class="secondario">Ho finito, manda</button>
+</div>
+
+<div id="s-fine" class="schermo">
+  <h1>Finito, grazie</h1>
+  <p class="tenue" id="riassunto"></p>
+  <div id="box-nonInviati" style="display:none">
+    <div class="avviso" id="avviso-file">
+      Ultimo passo: manda le registrazioni a Francesco.
+    </div>
+    <!-- Un tocco solo: si apre WhatsApp (o quello che preferisci) con il
+         file gia' allegato. Cercare il file scaricato dentro il telefono e
+         allegarlo a mano e' il punto in cui la gente si perde. -->
+    <button id="btn-manda">Manda a Francesco</button>
+    <button id="btn-scarica" class="secondario">Oppure scarica il file</button>
+  </div>
+  <button id="btn-ancora" class="secondario">Registra ancora</button>
+</div>
+
+<script type="module" src="raccolta.js?v=2610011625"></script>
+</body>
+</html>
