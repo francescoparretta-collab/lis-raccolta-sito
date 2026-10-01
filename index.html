@@ -18,12 +18,14 @@
   .schermo.attivo { display:block }
   /* Schermo largo (PC, telefono orizzontale): video a sinistra, frase + messaggi + pulsanti in alto a destra, tutto visibile senza scorrere. */
   @media (min-width: 900px) {
+    /* 2/10/2026 (2a versione, l'utente: "frase in alto centro"): FRASE in alto al centro su tutta la larghezza; sotto, video a sinistra e messaggi/pulsanti a destra */
     #s-registra.attivo { max-width:1120px; display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);
                          grid-template-rows:auto 1fr; column-gap:28px; align-items:start }
-    #s-registra .col-video { grid-column:1; grid-row:1 / span 2 }
-    #s-registra .col-testa { grid-column:2; grid-row:1 }
+    #s-registra .col-testa { grid-column:1 / span 2; grid-row:1; text-align:center }
+    #s-registra .col-video { grid-column:1; grid-row:2 }
     #s-registra .col-comandi { grid-column:2; grid-row:2 }
-    #s-registra .frase { font-size:32px; line-height:1.25 }   /* la frase da segnare: grande, la si legge da lontano */
+    #s-registra .frase { font-size:38px; line-height:1.2 }   /* la frase da segnare: grande, la si legge da lontano */
+    #s-registra .col-testa .riquadro { margin:6px 0 }
     #s-registra .stato { font-size:20px }
   }
   h1 { font-size:22px; margin:0 0 6px }
@@ -260,6 +262,6 @@
   <button id="btn-ancora" class="secondario">Registra ancora</button>
 </div>
 
-<script type="module" src="raccolta.js?v=2610011821"></script>
+<script type="module" src="raccolta.js?v=2610011826"></script>
 </body>
 </html>
