@@ -67,7 +67,8 @@
   /* Lo scheletro si disegna sopra il video. Il video e' specchiato dal CSS,
      e la tela di lavoro lo e' nei pixel: le due immagini coincidono, quindi
      qui le coordinate si usano com'escono da MediaPipe, senza specchiare. */
-  .inquadratura { position:relative; line-height:0 }
+  /* 2/10/2026, l'utente: lo schermo del telefono e' troppo grande, la barra della distanza e il testo restano fuori: l'inquadratura sta in meta' schermo e al centro */
+  .inquadratura { position:relative; line-height:0; width:min(100%, 52vh); margin:0 auto }
   .inquadratura canvas { position:absolute; inset:0; width:100%; height:100%;
                          border-radius:14px; pointer-events:none }
   /* pre-line: i messaggi con l'a capo scritto nel testo vanno a capo davvero,
@@ -277,6 +278,6 @@
   <button id="btn-ancora" class="secondario">Registra ancora</button>
 </div>
 
-<script type="module" src="raccolta.js?v=2610022223"></script>
+<script type="module" src="raccolta.js?v=2610022228"></script>
 </body>
 </html>
