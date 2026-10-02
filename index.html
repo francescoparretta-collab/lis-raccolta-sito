@@ -68,7 +68,8 @@
      e la tela di lavoro lo e' nei pixel: le due immagini coincidono, quindi
      qui le coordinate si usano com'escono da MediaPipe, senza specchiare. */
   /* 2/10/2026, l'utente: lo schermo del telefono e' troppo grande, la barra della distanza e il testo restano fuori: l'inquadratura sta in meta' schermo e al centro */
-  .inquadratura { position:relative; line-height:0; width:min(100%, 52vh); margin:0 auto }
+  .inquadratura { position:relative; line-height:0; width:min(100%, 36vh); margin:0 auto }   /* il video e' verticale (altezza = 1,33 x larghezza): 36vh di larghezza = circa meta' schermo di altezza */
+  body { padding-bottom: calc(110px + env(safe-area-inset-bottom)) }   /* la barra di Safari su iPhone copriva il fondo: ora si puo' scorrere fino a vedere tutto */
   .inquadratura canvas { position:absolute; inset:0; width:100%; height:100%;
                          border-radius:14px; pointer-events:none }
   /* pre-line: i messaggi con l'a capo scritto nel testo vanno a capo davvero,
@@ -278,6 +279,6 @@
   <button id="btn-ancora" class="secondario">Registra ancora</button>
 </div>
 
-<script type="module" src="raccolta.js?v=2610022228"></script>
+<script type="module" src="raccolta.js?v=2610022232"></script>
 </body>
 </html>
