@@ -40,6 +40,14 @@
     #s-registra .frase span.domanda { font-size:28px }
     #s-registra .col-testa .riquadro { margin:6px 0 }
     #s-registra .stato { font-size:20px }
+    /* 7/10/2026 sera, l'utente (schermata del sito online): "un po' piccola perche' c'e' fatica sotto": l'ESEMPIO (GIF + testo + pulsante) occupava ~430 px in colonna e spingeva in basso video e pulsanti,
+       che si vedevano solo scorrendo. Su schermo largo: GIF piccola a sinistra, testo e pulsante a destra, in una riga sola (~150 px). Sul telefono verticale resta come prima. */
+    #s-registra #box-esempio:not([style*="none"]), #s-registra #box-esempio-frase:not([style*="none"]) {
+      display:grid !important; grid-template-columns:150px 1fr; column-gap:18px; align-items:center; text-align:left }
+    #s-registra #esempio-segno, #s-registra #esempio-frase { grid-column:1; grid-row:1 / span 2; width:150px; margin:0 }
+    #s-registra #esempio-testo, #s-registra #esempio-testo-frase { grid-column:2; grid-row:1; text-align:left; margin:0 }
+    #s-registra #btn-diverso, #s-registra #btn-diversa-frase { grid-column:2; grid-row:2; margin:6px 0 0; padding:10px }
+    #s-registra .inquadratura { width:min(100%, 46vh) }
   }
   h1 { font-size:22px; margin:0 0 6px }
   h2 { font-size:18px; margin:0 0 4px }
@@ -227,8 +235,8 @@
     <div class="segno" id="nome-segno">—</div>
     <div id="box-esempio" style="display:none">
       <img id="esempio-segno" alt="Il segno di Francesco" width="230" height="230">
-      <p class="tenue" id="esempio-testo">Il segno di Francesco, come in uno specchio. Se il tuo è UGUALE, registralo. Se il tuo è DIVERSO, premi il pulsante e registra il tuo.</p>
-      <button id="btn-diverso" class="secondario">Il mio segno è DIVERSO</button>
+      <p class="tenue" id="esempio-testo">Questo è il segno di Francesco (come in uno specchio). Se il tuo ha la STESSA mano, lo STESSO posto e lo STESSO movimento: registralo, anche se è un po' più veloce o più lento. Se è una VARIANTE (mano, posto o movimento diversi): premi il pulsante e registra il tuo.</p>
+      <button id="btn-diverso" class="secondario">Il mio segno è una VARIANTE</button>
     </div>
     <div class="barra"><i id="barra-segno"></i></div>
     <div class="conteggio" id="conteggio">0 / 10</div>
@@ -239,8 +247,7 @@
     <div class="frase" id="frase"></div>
     <div id="box-esempio-frase" style="display:none">
       <img id="esempio-frase" alt="La frase di Francesco" width="230" height="230">
-      <p class="tenue" id="esempio-testo-frase">La frase di Francesco, come in uno specchio. Se la tua è UGUALE (stessi segni, stesso ordine), registrala. Se è DIVERSA, premi il pulsante e registra la tua.</p>
-      <button id="btn-diversa-frase" class="secondario">La mia frase è DIVERSA</button>
+      <p class="tenue" id="esempio-testo-frase">Così segna la frase Francesco (come in uno specchio). Segna anche tu gli stessi segni, nello stesso ordine.</p>
     </div>
     <div class="barra"><i id="barra-frasi"></i></div>
     <div class="conteggio" id="conteggio-frasi"></div>
@@ -294,6 +301,6 @@
   <button id="btn-ancora" class="secondario">Registra ancora</button>
 </div>
 
-<script type="module" src="raccolta.js?v=2610072000"></script>
+<script type="module" src="raccolta.js?v=2610072028"></script>
 </body>
 </html>
