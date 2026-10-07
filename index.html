@@ -49,6 +49,26 @@
     #s-registra #btn-diverso, #s-registra #btn-diversa-frase { grid-column:2; grid-row:2; margin:6px 0 0; padding:10px }
     #s-registra .inquadratura { width:min(100%, 46vh) }
   }
+  /* 7/10/2026 notte, l'utente sull'iPhone: "non va bene, troppo lungo": a 390x750 la pagina era alta 1157 px (esempio 294 + istruzioni + video + pulsanti) e si scorreva.
+     Telefono: esempio in una riga (GIF 92 px a sinistra, testo e pulsante a destra), riquadri e pulsanti piu' bassi, istruzioni piu' piccole. */
+  @media (max-width: 899px) {
+    #s-registra #box-esempio:not([style*="none"]), #s-registra #box-esempio-frase:not([style*="none"]) {
+      display:grid !important; grid-template-columns:92px 1fr; column-gap:10px; align-items:center; text-align:left }
+    #s-registra #esempio-segno, #s-registra #esempio-frase { grid-column:1; grid-row:1 / span 2; width:92px; margin:0 }
+    #s-registra #esempio-testo, #s-registra #esempio-testo-frase { grid-column:2; grid-row:1; text-align:left; margin:0; font-size:13px; line-height:1.3 }
+    #s-registra #btn-diverso { grid-column:2; grid-row:2; margin:4px 0 0; padding:8px; font-size:14px }
+    #s-registra .riquadro { padding:10px; margin:6px 0 }
+    #s-registra button { padding:11px; margin-top:6px }
+    #s-registra #istruzioni-frase { font-size:12px !important; line-height:1.35; margin:0 0 4px !important }
+    #s-registra .stato { padding:6px; font-size:16px }
+    #s-registra .barra { margin:6px 0 }
+    .schermo { padding:12px }
+    /* il video del telefono e' verticale (1,33 x la larghezza): un po' piu' stretto, e Salta + Ho finito sulla stessa riga */
+    #s-registra .inquadratura { width:min(100%, 31vh); width:min(100%, 31svh) }      /* svh = altezza visibile con le barre di Safari, dove c'e' */
+    #s-registra #conteggio-frasi { display:none }      /* 'fatte N di 99' e' gia' in cima: sul telefono serve lo spazio */
+    #s-registra .col-comandi { display:grid; grid-template-columns:1fr 1fr; column-gap:8px }
+    #s-registra .col-comandi > #stato, #s-registra .col-comandi > .barra, #s-registra .col-comandi > #btn-rifai { grid-column:1 / -1 }
+  }
   h1 { font-size:22px; margin:0 0 6px }
   h2 { font-size:18px; margin:0 0 4px }
   p.tenue { color:var(--tenue); font-size:15px; line-height:1.5 }
@@ -235,7 +255,7 @@
     <div class="segno" id="nome-segno">—</div>
     <div id="box-esempio" style="display:none">
       <img id="esempio-segno" alt="Il segno di Francesco" width="230" height="230">
-      <p class="tenue" id="esempio-testo">Questo è il segno di Francesco (come in uno specchio). Se il tuo ha la STESSA mano, lo STESSO posto e lo STESSO movimento: registralo, anche se è un po' più veloce o più lento. Se è una VARIANTE (mano, posto o movimento diversi): premi il pulsante e registra il tuo.</p>
+      <p class="tenue" id="esempio-testo">Il segno di Francesco, come in uno specchio. Se il tuo è UGUALE: registralo. Se è una VARIANTE (mano, posto o movimento diversi): premi il pulsante.</p>
       <button id="btn-diverso" class="secondario">Il mio segno è una VARIANTE</button>
     </div>
     <div class="barra"><i id="barra-segno"></i></div>
@@ -301,6 +321,6 @@
   <button id="btn-ancora" class="secondario">Registra ancora</button>
 </div>
 
-<script type="module" src="raccolta.js?v=2610072028"></script>
+<script type="module" src="raccolta.js?v=2610072313"></script>
 </body>
 </html>
