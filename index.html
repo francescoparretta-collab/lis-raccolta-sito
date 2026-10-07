@@ -80,6 +80,11 @@
   .avviso { background:#fff1d6; color:#6b3306; padding:12px; border-radius:10px;
             font-size:15px; margin:12px 0; border:2px solid #b45309 }
   .guida-foto { width:100%; border-radius:14px; display:block; margin:10px 0 }
+  /* 7/10/2026: l'ESEMPIO del segno di Francesco (mani e viso a punti) e il pulsante 'Il mio segno e' DIVERSO' */
+  #esempio-segno, #esempio-frase { display:block; margin:6px auto; width:min(250px, 58vw); height:auto; border-radius:12px; background:#fff }
+  #esempio-testo, #esempio-testo-frase { text-align:center; font-size:15px; font-weight:600; line-height:1.35; margin:2px 0 8px }
+  #btn-diverso, #btn-diversa-frase { width:100%; margin:4px 0 }
+  #btn-diverso.acceso, #btn-diversa-frase.acceso { background:#e65100; color:#fff; border-color:#7a2d00 }
   /* Il consenso: testo corto, frasi brevi. La casella e' grande, si tocca bene col dito. */
   .consenso { font-size:15px; line-height:1.55 }
   .consenso ul { margin:6px 0 0; padding-left:20px }
@@ -220,6 +225,11 @@
   <div class="riquadro" id="box-segno">
     <div class="conteggio"><span id="idx-segno"></span></div>
     <div class="segno" id="nome-segno">—</div>
+    <div id="box-esempio" style="display:none">
+      <img id="esempio-segno" alt="Il segno di Francesco" width="230" height="230">
+      <p class="tenue" id="esempio-testo">Il segno di Francesco, come in uno specchio. Se il tuo è UGUALE, registralo. Se il tuo è DIVERSO, premi il pulsante e registra il tuo.</p>
+      <button id="btn-diverso" class="secondario">Il mio segno è DIVERSO</button>
+    </div>
     <div class="barra"><i id="barra-segno"></i></div>
     <div class="conteggio" id="conteggio">0 / 10</div>
   </div>
@@ -227,6 +237,11 @@
   <div class="riquadro" id="box-frase" style="display:none">
     <div class="conteggio"><span id="idx-frase"></span></div>
     <div class="frase" id="frase"></div>
+    <div id="box-esempio-frase" style="display:none">
+      <img id="esempio-frase" alt="La frase di Francesco" width="230" height="230">
+      <p class="tenue" id="esempio-testo-frase">La frase di Francesco, come in uno specchio. Se la tua è UGUALE (stessi segni, stesso ordine), registrala. Se è DIVERSA, premi il pulsante e registra la tua.</p>
+      <button id="btn-diversa-frase" class="secondario">La mia frase è DIVERSA</button>
+    </div>
     <div class="barra"><i id="barra-frasi"></i></div>
     <div class="conteggio" id="conteggio-frasi"></div>
   </div>
@@ -279,6 +294,6 @@
   <button id="btn-ancora" class="secondario">Registra ancora</button>
 </div>
 
-<script type="module" src="raccolta.js?v=2610030908"></script>
+<script type="module" src="raccolta.js?v=2610072000"></script>
 </body>
 </html>
