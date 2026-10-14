@@ -47,6 +47,9 @@
     #s-registra #esempio-segno, #s-registra #esempio-frase { grid-column:1; grid-row:1 / span 2; width:150px; margin:0 }
     #s-registra #esempio-testo, #s-registra #esempio-testo-frase { grid-column:2; grid-row:1; text-align:left; margin:0 }
     #s-registra #btn-diverso, #s-registra #btn-diversa-frase { grid-column:2; grid-row:2; margin:6px 0 0; padding:10px }
+    /* 9/10/2026: GIF dell'esempio mancante -> niente colonna vuota a sinistra, testo e pulsante a tutta larghezza */
+    #s-registra #box-esempio.senza-img:not([style*="none"]) { grid-template-columns:1fr }
+    #s-registra #box-esempio.senza-img #esempio-testo, #s-registra #box-esempio.senza-img #btn-diverso { grid-column:1 }
     #s-registra .inquadratura { width:min(100%, 46vh) }
   }
   /* 7/10/2026 notte, l'utente sull'iPhone: "non va bene, troppo lungo": a 390x750 la pagina era alta 1157 px (esempio 294 + istruzioni + video + pulsanti) e si scorreva.
@@ -57,6 +60,10 @@
     #s-registra #esempio-segno, #s-registra #esempio-frase { grid-column:1; grid-row:1 / span 2; width:92px; margin:0 }
     #s-registra #esempio-testo, #s-registra #esempio-testo-frase { grid-column:2; grid-row:1; text-align:left; margin:0; font-size:13px; line-height:1.3 }
     #s-registra #btn-diverso { grid-column:2; grid-row:2; margin:4px 0 0; padding:8px; font-size:14px }
+    /* 9/10/2026: GIF dell'esempio mancante -> testo e pulsante a tutta larghezza (niente colonna vuota) */
+    #s-registra #box-esempio.senza-img:not([style*="none"]) { grid-template-columns:1fr }
+    #s-registra #box-esempio.senza-img #esempio-testo, #s-registra #box-esempio.senza-img #btn-diverso { grid-column:1 }
+    .segno .nota { font-size:14px }
     #s-registra .riquadro { padding:10px; margin:6px 0 }
     #s-registra button { padding:11px; margin-top:6px }
     #s-registra #istruzioni-frase { font-size:12px !important; line-height:1.35; margin:0 0 4px !important }
@@ -83,6 +90,8 @@
   .riquadro { background:var(--carta); border-radius:14px; padding:14px; margin:12px 0;
               border:2px solid var(--bordo); box-shadow:0 2px 0 rgba(6,25,27,.12) }
   .segno { font-size:34px; font-weight:700; text-align:center; margin:6px 0 }
+  /* 9/10/2026: la parte fra parentesi del nome ("volere (come piacere, ...)", "non posso (impossibilitato)") piu' piccola, sotto la parola grande */
+  .segno .nota { display:block; font-size:16px; font-weight:600; color:var(--tenue); line-height:1.3; margin-top:2px }
   /* La frase: un riquadro per segno, cosi' si vede dove finisce uno e comincia l'altro */
   .frase { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin:8px 0 }
   .frase span { font-size:22px; font-weight:700; padding:6px 10px; border-radius:10px;
@@ -133,41 +142,108 @@
   #pos-testo { text-align:center; font-size:14px; font-weight:600; margin-top:2px }
   .parte { display:flex; flex-direction:column }
   .parte .quanto { color:var(--tenue); font-size:15px; font-weight:600 }
+
+  /* 10/10/2026, l'utente: "non serve troppo scrivere perche' sordi, adatto piu' immagini" e "ordine piu' chiaro, posizione bene" */
+  .icone { display:flex; flex-direction:column; gap:8px; margin:8px 0 }
+  .icone > div { display:flex; align-items:center; gap:12px; font-size:16px; line-height:1.3; font-weight:600 }
+  .icone > div > i { font-style:normal; font-size:26px; width:38px; text-align:center; flex:none }
+  .icone.grande > div { font-size:18px }
+  .icone.grande > div > i { font-size:34px; width:46px }
+  details.completo { margin:10px 0 0; font-size:14px }
+  details.completo summary { cursor:pointer; font-weight:700; color:var(--acc) }
+  details.completo ul { margin:6px 0 0; padding-left:20px }
+  /* il percorso: cinque tappe in fila */
+  .percorso { display:flex; align-items:center; justify-content:center; gap:0; margin:10px 0 }
+  .percorso u { width:18px; height:4px; background:var(--bordo); flex:none }
+  .percorso .nodo { position:relative; width:52px; height:52px; border-radius:50%; background:#fff; border:3px solid var(--bordo);
+                    display:flex; flex-direction:column; align-items:center; justify-content:center; flex:none }
+  .percorso .nodo i { font-style:normal; font-size:22px; line-height:1 }
+  .percorso .nodo b { font-size:11px; line-height:1 }
+  .percorso .nodo.fatto { background:#bfe8cc; border-color:#2e9d57 }
+  .percorso .nodo.fatto::after { content:'\2714'; position:absolute; right:-6px; top:-8px; background:#2e9d57; color:#fff; width:20px; height:20px;
+                                 border-radius:50%; font-size:12px; display:flex; align-items:center; justify-content:center }
+  .percorso .nodo.adesso { border-color:#0e8f9e; box-shadow:0 0 0 4px #0e8f9e55; transform:scale(1.12) }
+  /* le schede delle parti: icona grande a sinistra */
+  .parte { display:grid !important; grid-template-columns:64px 1fr; column-gap:12px; align-items:start }
+  .parte .icona { grid-column:1; grid-row:1; font-size:46px; line-height:1.1; text-align:center }
+  .parte .corpo { grid-column:2; display:flex; flex-direction:column; min-width:0 }
+  .parte .barra.mini { height:10px; margin:6px 0 }
+  .parte.prossima::before { content:'\25B6  ADESSO' !important }
+  /* la riga dei gruppi sopra il segno o la frase */
+  .gruppi { scrollbar-width:none; display:flex; gap:6px; overflow-x:auto; padding:4px 2px 8px; margin:0 0 2px; -webkit-overflow-scrolling:touch }
+  #s-registra button.chip, button.chip { width:auto; flex:none; margin:0; padding:6px 12px; font-size:13px; border-radius:16px; white-space:nowrap;
+        background:linear-gradient(90deg,#bfe8cc var(--p,0%),#ffffff var(--p,0%)); color:var(--testo); border:2px solid var(--bordo) }
+  #s-registra button.chip.fatto { background:#bfe8cc; border-color:#2e9d57 }
+  #s-registra button.chip.adesso { outline:3px solid #0e8f9e; outline-offset:1px; font-weight:800; border-color:#0e8f9e }
+
+  /* 10/10/2026, l'utente: "anche colore chiaro e varie": ogni parte, ogni gruppo ha un suo colore CHIARO diverso (il testo resta quasi nero, i bordi scuri) */
+  .parte.p1, .percorso .nodo[data-k=alfabeto] { background:#d6f0ff; border-color:#3a8fb7 }
+  .parte.p2, .percorso .nodo[data-k=segni]    { background:#dcf5d0; border-color:#4c9a3a }
+  .parte.p3, .percorso .nodo[data-k=frasi]    { background:#fff4bf; border-color:#b8960b }
+  .parte.p4, .percorso .nodo[data-k=altri]    { background:#ffdbe6; border-color:#c24b78 }
+  .parte.p5, .percorso .nodo[data-k=giorni]   { background:#e6dbff; border-color:#7a52c7 }
+  .percorso .nodo.fatto { background:#bfe8cc !important; border-color:#2e9d57 !important }
+  .percorso .nodo.adesso { border-color:#0a6572 !important }
+  .parte .barra.mini { background:#fff }
+  #s-registra #box-segno, #s-registra #box-frase { background:var(--gc, #ffffff) }
+  #s-registra button.chip { background:linear-gradient(90deg,#8fd6a3 var(--p,0%),var(--c,#fff) var(--p,0%)); border-color:var(--cb,var(--bordo)) }
+
+  /* 10/10/2026, l'utente: "troppo verticale, serve equilibrio, come metterti a destra". Su schermo largo: pagina iniziale a DUE colonne (a sinistra consenso e nome, a destra come metterti e come segnare),
+     menu con le schede a due colonne. Sul telefono resta una colonna sola. */
+  @media (min-width: 900px) {
+    #s-inizio.attivo { max-width:1120px; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); column-gap:32px; align-items:start }
+    #s-inizio .guida-foto { max-height:62vh; object-fit:contain; background:#fff; border:2px solid var(--bordo) }
+    #s-menu.attivo { max-width:1120px; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); column-gap:20px; align-items:start }
+    #s-menu > h1, #s-menu > .percorso, #s-menu > p, #s-menu > .avviso, #s-menu > #btn-menu-fine { grid-column:1 / -1 }
+    #s-menu > h1 { text-align:center }
+  }
+
+  /* 10/10/2026, l'utente: "no, cambia, piu' chiaro" (schermata di registrazione). Schermo largo: RIGA DEI GRUPPI in alto a tutta larghezza; SOTTO a SINISTRA il segno o la frase
+     (nome grande + esempio GRANDE + pulsante), a DESTRA la camera, la distanza e i comandi. Due metà uguali: da una parte cosa fare, dall'altra te. */
+  @media (min-width: 900px) {
+    #s-registra.attivo { max-width:1180px; grid-template-columns:minmax(0,1fr) minmax(0,1fr); grid-template-rows:auto auto 1fr; column-gap:28px }
+    #s-registra .gruppi { grid-column:1 / -1; grid-row:1 }
+    #s-registra .col-testa { grid-column:1; grid-row:2 / span 2; text-align:center }
+    #s-registra .col-video { grid-column:2; grid-row:2 }
+    #s-registra .col-comandi { grid-column:2; grid-row:3 }
+    #s-registra .segno { font-size:52px; margin:10px 0 }
+    #s-registra #box-esempio:not([style*="none"]), #s-registra #box-esempio-frase:not([style*="none"]) { display:block !important; text-align:center }
+    #s-registra #esempio-segno, #s-registra #esempio-frase { width:min(300px, 100%); margin:6px auto }
+    #s-registra #esempio-testo, #s-registra #esempio-testo-frase { text-align:center; font-size:17px }
+    #s-registra #btn-diverso, #s-registra #btn-diversa-frase { max-width:420px; margin:8px auto }
+    #s-registra .inquadratura { width:min(100%, 52vh) }
+  }
 </style>
 </head>
 <body>
 
 <div id="s-inizio" class="schermo attivo">
-  <h1>Grazie per l'aiuto!</h1>
-  <p class="tenue">Un computer sta imparando la LIS.<br>
-     Con i tuoi segni lo aiuti a riconoscere <b>tante persone</b>, non una sola.</p>
-
-  <div class="privacy">
-    <b>Il video resta sul tuo dispositivo.</b><br>
-    La pagina rileva solo la posizione di mani, viso e spalle.<br>
-    Nessuna immagine viene inviata.
+  <div class="col-s">
+  <h1>Grazie per l'aiuto! 🙏</h1>
+  <!-- 10/10/2026, l'utente: "non serve troppo scrivere perche' sordi, adatto piu' immagini". Righe corte con una icona grande; il testo completo del consenso sta in 'Testo completo'. -->
+  <div class="icone grande">
+    <div><i>🤖</i><span>Un computer impara la LIS da <b>tante persone</b></span></div>
+    <div><i>🔒</i><span>Il video resta da te. Parte solo la posizione di mani, viso, spalle</span></div>
   </div>
 
-  <!-- Il numero lo scrive raccolta.js: la pagina ha piu' elenchi e scritto a
-       mano restava sempre "9". -->
+  <!-- Il numero lo scrive raccolta.js -->
   <p class="tenue"><b id="quanti">&nbsp;</b><br>
-     <span id="durata">&nbsp;</span><br>
-     Puoi fermarti quando vuoi.</p>
+     <span id="durata">&nbsp;</span></p>
 
-  <!-- Il consenso (27/9/2026), prima di tutto il resto. Frasi corte: per molti sordi
-       l'italiano e' la seconda lingua. -->
   <div class="riquadro consenso">
     <h2>Prima di cominciare</h2>
-    <ul>
-      <li><b>Chi raccoglie:</b> Francesco Parretta, progetto LIS Bridge.</li>
-      <li><b>Perché:</b> insegnare a un computer a riconoscere la LIS.</li>
-      <li><b>Cosa parte:</b> solo numeri. Sono le posizioni di mani, viso (bocca,
-          occhi, sopracciglia) e spalle. Niente video, niente foto.</li>
-      <li><b>Il nome:</b> puoi usare un soprannome.</li>
-      <li><b>Puoi fermarti</b> quando vuoi.</li>
-      <li><b>Puoi chiedere di cancellare</b> i tuoi dati: scrivi a Francesco
-          il nome che hai usato qui.</li>
-    </ul>
+    <!-- 10/10/2026, l'utente: "non completo, io voglio vedere completo tutto": il testo del consenso e' tutto visibile (parola per parola come prima), ogni voce con la sua icona -->
+    <div class="icone">
+      <div><i>👤</i><span><b>Chi raccoglie:</b> Francesco Parretta, progetto LIS Bridge.</span></div>
+      <div><i>🎯</i><span><b>Perché:</b> insegnare a un computer a riconoscere la LIS.</span></div>
+      <div><i>🔢</i><span><b>Cosa parte:</b> solo numeri. Sono le posizioni di mani, viso (bocca, occhi, sopracciglia) e spalle.
+          Niente video, niente foto. Parte anche il tipo di telefono e di browser (per capire se la pagina è troppo pesante).</span></div>
+      <div><i>🏷️</i><span><b>Il nome:</b> scegli un soprannome e ricordalo. Serve se vuoi cancellare i tuoi dati.</span></div>
+      <div><i>⏹️</i><span><b>Puoi fermarti</b> quando vuoi.</span></div>
+      <div><i>🗑️</i><span><b>Puoi chiedere di cancellare</b> i tuoi dati: scrivi a Francesco il soprannome che hai usato qui.
+          Cancello le tue registrazioni dal database e dai miei file.
+          Quello che il programma ha già imparato non si può togliere.</span></div>
+    </div>
     <label class="spunta">
       <input type="checkbox" id="consenso">
       <span>Ho letto. Ho almeno 18 anni. Sono d'accordo che i miei segni
@@ -175,77 +251,111 @@
     </label>
   </div>
 
-  <input id="nome" placeholder="Il tuo nome o un soprannome" autocomplete="off"
+  <input id="nome" placeholder="Un soprannome (ricordalo)" autocomplete="off"
          autocapitalize="off" spellcheck="false">
-  <p class="tenue" style="font-size:13px">Solo lettere e numeri. Senza spazi.</p>
+  <p class="tenue" style="font-size:13px">🔤 Solo lettere e numeri, senza spazi.</p>
 
-  <button id="btn-inizia" disabled>Comincia</button>
+  <button id="btn-inizia" disabled>▶ Comincia</button>
 
-  <!-- Il titolo dice QUANDO guardare l'immagine; l'immagine, che ha gia' il
-       suo titolo dentro, dice COSA fare. -->
-  <h1 style="font-size:18px;margin-top:26px">Come metterti</h1>
-  <p class="tenue" style="font-size:14px;margin-top:0">Se qualcosa non va,
-     la pagina te lo dice.</p>
+  </div>
+  <div class="col-d">
+  <h1 style="font-size:18px;margin-top:0">🎬 Durante la registrazione</h1>
+  <div class="riquadro">
+    <div class="icone grande">
+      <div><i>🙌</i><span>Due mani libere</span></div>
+      <div><i>📱</i><span>Telefono in verticale, fermo</span></div>
+      <div><i>🗣️</i><span>Segna naturale: bocca e viso come vengono</span></div>
+      <div><i>🐢</i><span>Non rallentare, non esagerare</span></div>
+      <div><i>👕</i><span>Maglietta a tinta unita</span></div>
+      <div><i>🤚</i><span>Mancino? Usa la tua mano di sempre</span></div>
+    </div>
+  </div>
 
-  <!-- Una sola immagine, telefono e computer affiancati. Si puo' toccare
-       per aprirla intera e ingrandirla: sullo schermo del telefono le
-       scritte piccole altrimenti non si leggerebbero. -->
+  <h1 style="font-size:18px;margin-top:22px">📷 Come metterti</h1>
   <a href="immagini/guida.jpg" target="_blank" rel="noopener">
     <img class="guida-foto" src="immagini/guida.jpg"
          alt="Come posizionare lo smartphone e il computer: appoggiati in alto,
               webcam all'altezza degli occhi, viso e mani dentro
               l'inquadratura, luce davanti">
   </a>
-  <p class="tenue" style="font-size:13px;margin-top:0">Tocca o clicca
-     l'immagine per ingrandirla.</p>
-
-  <!-- Solo quello che l'immagine NON puo' dire: il PERCHE' non si tiene in
-       mano, e come si deve segnare. -->
-  <h1 style="font-size:18px;margin-top:26px">Durante la registrazione</h1>
-  <div class="riquadro" style="font-size:15px;line-height:1.55;margin-top:8px">
-    <b>Tieni entrambe le mani libere.</b><br>
-    Non tenere il telefono in mano. Telefono in verticale.<br><br>
-    <b>Segna come fai normalmente.</b><br>
-    Usa il tuo labiale e le tue espressioni.<br>
-    Non rallentare.<br>
-    Non esagerare i movimenti.<br><br>
-    <b>Maglietta a tinta unita</b>, meglio se diversa dal colore della pelle.
+  <p class="tenue" style="font-size:13px;margin-top:0">🔍 Tocca l'immagine per ingrandirla</p>
   </div>
-
 </div>
 
-<!-- Il menu delle tre parti (solo per i docenti; ?nuovi e ?difficili vanno dritti ai segni).
-     Ogni parte si puo' fare quando si vuole, anche un altro giorno: il numero di quelle fatte
-     resta su questo dispositivo. -->
+<!-- Il menu delle cinque parti (10/10/2026, l'utente: ordine chiaro, posizione chiara, meno testo, piu' immagini). Sopra: il PERCORSO (5 tappe: fatta = verde, ADESSO = bordo).
+     Ogni parte e' una scheda con una icona grande, il tempo, la barra e il numero (fatti / totale). Il numero fatto resta nel browser. -->
 <div id="s-menu" class="schermo">
   <h1>Scegli una parte</h1>
-  <p class="tenue" style="margin-top:0">Puoi farle in qualsiasi ordine.
-     Puoi fermarti e tornare qui quando vuoi.</p>
+  <div class="percorso" id="percorso">
+    <span class="nodo" data-k="alfabeto"><i>✋</i><b>1</b></span><u></u>
+    <span class="nodo" data-k="segni"><i>☝️</i><b>2</b></span><u></u>
+    <span class="nodo" data-k="frasi"><i>💬</i><b>3</b></span><u></u>
+    <span class="nodo" data-k="altri"><i>➕</i><b>4</b></span><u></u>
+    <span class="nodo" data-k="giorni"><i>📅</i><b>5</b></span>
+  </div>
+  <p class="tenue" style="margin:0;text-align:center">↻ Puoi fermarti e tornare</p>
   <div class="avviso" id="m-messaggio" style="display:none"></div>
 
-  <!-- 2/10/2026, l'utente: ordine 1 dattilologia, 2 segni singoli, 3 frasi (era frasi, segni, alfabeto) -->
-  <div class="riquadro parte">
-    <h2>1. Dattilologia</h2>
-    <span class="quanto">L'alfabeto in tre pezzi (3 volte) e 25 parole, una volta. Circa 8 minuti.</span>
-    <span class="quanto" id="m-alfabeto"></span>
-    <button id="btn-p-alfabeto">Dattilologia</button>
+  <div class="riquadro parte p1">
+    <div class="icona">✋</div>
+    <div class="corpo">
+      <h2>1. Dattilologia</h2>
+      <span class="quanto">⏱ 5 min · lettere e parole</span>
+      <div class="barra mini"><i id="b-alfabeto"></i></div>
+      <span class="quanto" id="m-alfabeto"></span>
+      <button id="btn-p-alfabeto">▶ Dattilologia</button>
+    </div>
   </div>
-  <div class="riquadro parte">
-    <h2>2. Segni singoli</h2>
-    <span class="quanto">Un segno alla volta, 3 volte. Circa 10 minuti.</span>
-    <span class="quanto" id="m-segni"></span>
-    <button id="btn-p-segni">Segni singoli</button>
+  <div class="riquadro parte p2">
+    <div class="icona">☝️</div>
+    <div class="corpo">
+      <h2>2. Segni singoli</h2>
+      <span class="quanto">⏱ 10 min · un segno alla volta</span>
+      <div class="barra mini"><i id="b-segni"></i></div>
+      <span class="quanto" id="m-segni"></span>
+      <button id="btn-p-segni">▶ Segni singoli</button>
+      <button id="btn-r-segni" class="secondario" style="display:none">⏭ Rivedi i saltati</button>
+    </div>
   </div>
-  <div class="riquadro parte">
-    <h2>3. Frasi</h2>
-    <span class="quanto">Frasi corte in LIS. Circa 20 minuti.</span>
-    <span class="quanto" id="m-frasi"></span>
-    <button id="btn-p-frasi">Frasi</button>
+  <div class="riquadro parte p3">
+    <div class="icona">💬</div>
+    <div class="corpo">
+      <h2>3. Frasi</h2>
+      <span class="quanto">⏱ 15 min · frasi corte</span>
+      <div class="barra mini"><i id="b-frasi"></i></div>
+      <span class="quanto" id="m-frasi"></span>
+      <button id="btn-p-frasi">▶ Frasi</button>
+    </div>
   </div>
-  <button id="btn-menu-fine" class="secondario">Ho finito</button>
+  <div class="riquadro parte p4">
+    <div class="icona">➕</div>
+    <div class="corpo">
+      <h2>4. Altri segni</h2>
+      <span class="quanto">⏱ 14 min · un segno alla volta</span>
+      <div class="barra mini"><i id="b-altri"></i></div>
+      <span class="quanto" id="m-altri"></span>
+      <button id="btn-p-altri">▶ Altri segni</button>
+      <button id="btn-r-altri" class="secondario" style="display:none">⏭ Rivedi i saltati</button>
+    </div>
+  </div>
+  <div class="riquadro parte p5">
+    <div class="icona">📅</div>
+    <div class="corpo">
+      <h2>5. Prossimo e scorso</h2>
+      <span class="quanto">⏱ 3 min · «lunedì prossimo» con UN segno</span>
+      <span class="quanto">⚠️ Fai DUE segni? Premi ⏭ Salta</span>
+      <div class="barra mini"><i id="b-giorni"></i></div>
+      <span class="quanto" id="m-giorni"></span>
+      <button id="btn-p-giorni">▶ Prossimo e scorso</button>
+      <button id="btn-r-giorni" class="secondario" style="display:none">⏭ Rivedi i saltati</button>
+    </div>
+  </div>
+  <button id="btn-menu-fine" class="secondario">✔ Ho finito</button>
 </div>
 
 <div id="s-registra" class="schermo">
+  <!-- 10/10/2026: DOVE SEI. Un riquadro per gruppo (icona, nome, fatti/totale); quello di adesso ha il bordo; toccare un gruppo ci porta li' -->
+  <div class="gruppi" id="gruppi"></div>
   <!-- 2/10/2026, l'utente: "sotto non vedo bene, meglio sopra destra". Tre blocchi: sul telefono (stretto) restano uno sotto l'altro come prima;
        su uno schermo largo (PC, telefono orizzontale) il VIDEO sta a sinistra e frase, messaggi e pulsanti stanno in ALTO A DESTRA, senza scorrere. -->
   <div class="col-testa">
@@ -255,8 +365,8 @@
     <div class="segno" id="nome-segno">—</div>
     <div id="box-esempio" style="display:none">
       <img id="esempio-segno" alt="Il segno di Francesco" width="230" height="230">
-      <p class="tenue" id="esempio-testo">Il segno di Francesco, come in uno specchio. Se il tuo è UGUALE: registralo. Se è una VARIANTE (mano, posto o movimento diversi): premi il pulsante.</p>
-      <button id="btn-diverso" class="secondario">Il mio segno è una VARIANTE</button>
+      <p class="tenue" id="esempio-testo">👀 Francesco → 🤟 tu. Segno uguale? Registra.</p>
+      <button id="btn-diverso" class="secondario">≠ Il mio segno è diverso</button>
     </div>
     <div class="barra"><i id="barra-segno"></i></div>
     <div class="conteggio" id="conteggio">0 / 10</div>
@@ -267,16 +377,12 @@
     <div class="frase" id="frase"></div>
     <div id="box-esempio-frase" style="display:none">
       <img id="esempio-frase" alt="La frase di Francesco" width="230" height="230">
-      <p class="tenue" id="esempio-testo-frase">Così segna la frase Francesco (come in uno specchio). Segna anche tu gli stessi segni, nello stesso ordine.</p>
+      <p class="tenue" id="esempio-testo-frase">👀 Francesco → 🤟 tu. Stessi segni, stesso ordine.</p>
     </div>
     <div class="barra"><i id="barra-frasi"></i></div>
     <div class="conteggio" id="conteggio-frasi"></div>
   </div>
-  <p class="tenue" id="istruzioni-frase" style="display:none;font-size:14px;margin:0 0 8px">
-    Segna la frase in modo naturale, nell'ordine scritto.
-    Con <b>?</b> è una domanda: fai il viso della domanda.
-    Comincia da sola quando alzi le mani.
-    Alla fine <b>abbassa le mani</b>.</p>
+  <p class="tenue" id="istruzioni-frase" style="display:none;font-size:15px;margin:0 0 8px;text-align:center">🙌⬆️ alza le mani = si parte &nbsp;·&nbsp; 🙌⬇️ abbassa = fine &nbsp;·&nbsp; ❓ domanda = faccia di domanda</p>
   </div>
   <div class="col-video">
   <!-- Il video con sopra lo scheletro della mano. Vedere le linee verdi e i
@@ -290,18 +396,18 @@
   <!-- la distanza: il trattino deve stare nel verde -->
   <div class="posizione">
     <div class="scala"><i class="zona"></i><b id="pos-segno"></b></div>
-    <div class="pos-etichette"><span>lontano</span><span>vicino</span></div>
+    <div class="pos-etichette"><span>🔭 lontano</span><span>vicino 🔍</span></div>
     <div id="pos-testo"></div>
   </div>
   </div>
   <div class="col-comandi">
   <div class="stato" id="stato">Avvio…</div>
   <div class="barra"><i id="barra-seq" style="background:var(--attesa)"></i></div>
-  <button id="btn-rifai" class="secondario" style="display:none" disabled>Rifai l'ultima</button>
-  <button id="btn-salta" class="secondario">Salta</button>
+  <button id="btn-rifai" class="secondario" style="display:none" disabled>↩ Rifai l'ultima</button>
+  <button id="btn-salta" class="secondario">⏭ Salta</button>
   <!-- Prima, chi si stancava a meta' e chiudeva la pagina perdeva tutto.
        Con questo puo' fermarsi quando vuole e mandare lo stesso. -->
-  <button id="btn-finito" class="secondario">Ho finito, manda</button>
+  <button id="btn-finito" class="secondario">✔ Ho finito, manda</button>
   </div>
 </div>
 
@@ -321,6 +427,6 @@
   <button id="btn-ancora" class="secondario">Registra ancora</button>
 </div>
 
-<script type="module" src="raccolta.js?v=2610072313"></script>
+<script type="module" src="raccolta.js?v=2610142143"></script>
 </body>
 </html>
