@@ -149,6 +149,21 @@
   .icone > div > i { font-style:normal; font-size:26px; width:38px; text-align:center; flex:none }
   .icone.grande > div { font-size:18px }
   .icone.grande > div > i { font-size:34px; width:46px }
+  /* 25/10/2026, Francesco: "piu' immagini chiare": riquadri con un disegno e due righe sotto (giusto = verde, sbagliato = rosso) */
+  .figure { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:8px; margin:8px 0 }
+  .figure.due { grid-template-columns:repeat(2, minmax(0,1fr)) }
+  .figure figure { margin:0; background:#fff; border:2px solid var(--bordo); border-radius:12px; padding:6px 4px; text-align:center }
+  .figure figure.si { border-color:#2e9d57; background:#eefaf1 }
+  .figure figure.no { border-color:#c0392b; background:#fdecea }
+  .figure svg { width:100%; height:auto; max-height:118px; display:block }
+  .figure figcaption { font-size:14px; font-weight:700; line-height:1.25; margin-top:4px }
+  .figure .num { display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:50%;
+                 background:var(--acc); color:#fff; font-size:12px; margin-right:2px }
+  @media (max-width: 420px) { .figure { grid-template-columns:repeat(2, minmax(0,1fr)) } }
+  /* le stesse figure in piccolo sopra il video (registrazione): una riga sola */
+  .striscia { display:flex; justify-content:center; gap:6px; margin:0 0 6px }
+  .striscia > div { display:flex; flex-direction:column; align-items:center; width:74px; font-size:12px; font-weight:700; line-height:1.15; color:var(--testo) }
+  .striscia svg { width:40px; height:44px; display:block }
   details.completo { margin:10px 0 0; font-size:14px }
   details.completo summary { cursor:pointer; font-weight:700; color:var(--acc) }
   details.completo ul { margin:6px 0 0; padding-left:20px }
@@ -197,6 +212,8 @@
     #s-menu > h1, #s-menu > .percorso, #s-menu > p, #s-menu > .avviso, #s-menu > #btn-menu-fine { grid-column:1 / -1 }
     #s-menu > h1 { text-align:center }
   }
+  /* 25/10/2026, Francesco: "centro": nel modo pilota (?frasi) c'e' UNA scheda sola: una colonna al centro invece di due */
+  @media (min-width: 900px) { #s-menu.solo-frasi.attivo { grid-template-columns:minmax(0, 620px); justify-content:center } }
 
   /* 10/10/2026, l'utente: "no, cambia, piu' chiaro" (schermata di registrazione). Schermo largo: RIGA DEI GRUPPI in alto a tutta larghezza; SOTTO a SINISTRA il segno o la frase
      (nome grande + esempio GRANDE + pulsante), a DESTRA la camera, la distanza e i comandi. Due metà uguali: da una parte cosa fare, dall'altra te. */
@@ -223,7 +240,7 @@
   <!-- 10/10/2026, l'utente: "non serve troppo scrivere perche' sordi, adatto piu' immagini". Righe corte con una icona grande; il testo completo del consenso sta in 'Testo completo'. -->
   <div class="icone grande">
     <div><i>🤖</i><span>Un computer impara la LIS da <b>tante persone</b></span></div>
-    <div><i>🔒</i><span>Il video resta da te. Parte solo la posizione di mani, viso, spalle</span></div>
+    <div><i>🔒</i><span>Il video resta da te.<br>Partono solo numeri: i punti di mani, viso e corpo.</span></div>
   </div>
 
   <!-- Il numero lo scrive raccolta.js -->
@@ -234,24 +251,29 @@
     <h2>Prima di cominciare</h2>
     <!-- 10/10/2026, l'utente: "non completo, io voglio vedere completo tutto": il testo del consenso e' tutto visibile (parola per parola come prima), ogni voce con la sua icona -->
     <div class="icone">
-      <div><i>👤</i><span><b>Chi raccoglie:</b> Francesco Parretta, progetto LIS Bridge.</span></div>
-      <div><i>🎯</i><span><b>Perché:</b> insegnare a un computer a riconoscere la LIS.</span></div>
-      <div><i>🔢</i><span><b>Cosa parte:</b> solo numeri. Sono le posizioni di mani, viso (bocca, occhi, sopracciglia) e spalle.
-          Niente video, niente foto. Parte anche il tipo di telefono e di browser (per capire se la pagina è troppo pesante).</span></div>
-      <div><i>🏷️</i><span><b>Il nome:</b> scegli un soprannome e ricordalo. Serve se vuoi cancellare i tuoi dati.</span></div>
-      <div><i>⏹️</i><span><b>Puoi fermarti</b> quando vuoi.</span></div>
-      <div><i>🗑️</i><span><b>Puoi chiedere di cancellare</b> i tuoi dati: scrivi a Francesco il soprannome che hai usato qui.
-          Cancello le tue registrazioni dal database e dai miei file.
-          Quello che il programma ha già imparato non si può togliere.</span></div>
+      <!-- 25/10/2026, Francesco: "testi piu' semplici e piu' immagini chiare" (revisione 22/10 punto 29: per chi e' sordo frasi lunghe, parentesi e parole
+           difficili si leggono male). STESSE informazioni della versione 2026-10-22, una idea per riga, niente parentesi: versione 2026-10-25, testo in
+           pilota_22ott/consenso_2026-10-25.txt. [CONTATTO] lo decide Francesco: prepara_pubblicazione.py NON pubblica finche' c'e'. Tempo 3 anni (23/10),
+           Supabase in Irlanda (22/10). Da far controllare a un esperto di privacy prima di pubblicare. -->
+      <!-- 25/10/2026 sera, Francesco: "breve e semplice" e "Dove vanno ... per forza?": qui solo le cose principali (primo livello); dove vanno i dati
+           (Supabase Irlanda, computer, Google Drive), i dati del dispositivo, i diritti e il Garante restano TUTTI nell'informativa completa (link). -->
+      <div><i>👤</i><span>Francesco Parretta, progetto LIS Bridge.</span></div>      <!-- 25/10 sera, Francesco: contatto una volta sola (riga per cancellare) -->
+      <div><i>🎯</i><span>Serve a insegnare la LIS a un computer.</span></div>      <!-- 25/10 sera, Francesco: "Non vendo i dati" meglio togliere (resta nell'informativa) -->
+      <div><i>🔢</i><span>Partono <b>solo numeri</b>: i punti di mani, viso e corpo.<br><b>Niente video, niente foto, niente audio.</b></span></div>
+      <div><i>🏷️</i><span>Sono dati personali: usa un <b>soprannome</b>, non il tuo nome.<br>Ricordalo.</span></div>
+      <!-- 25/10 sera, Francesco: "Tengo i dati 3 anni" non serve qui: resta nell'informativa completa (punto 12) -->
+      <div><i>🗑️</i><span><b>Puoi fermarti</b> quando vuoi.<br>Per cancellare tutto o per domande: scrivi a Francesco, al contatto del messaggio di invito.</span></div>      <!-- 25/10: per i 3 pilota; email nuova del progetto piu' avanti, quando la pagina e' per tutti (Francesco) -->
+      <div><i>📄</i><span>Dove vanno i dati, i tuoi diritti, tutti i dettagli:<br><a href="informativa.html" target="_blank">Informativa completa</a></span></div>
     </div>
     <label class="spunta">
       <input type="checkbox" id="consenso">
-      <span>Ho letto. Ho almeno 18 anni. Sono d'accordo che i miei segni
-            siano usati per questo progetto.</span>
+      <span>Ho letto l'informativa.<br>Ho almeno 18 anni.<br>Sono d'accordo: i punti di mani, viso e corpo
+            servono a insegnare e provare il programma LIS.</span>
     </label>
+    <p class="tenue" style="font-size:13px;margin:4px 0 0">🔞 Meno di 18 anni? Non registrare qui.</p>
   </div>
 
-  <input id="nome" placeholder="Un soprannome (ricordalo)" autocomplete="off"
+  <input id="nome" placeholder="Un soprannome, non il nome vero (ricordalo)" autocomplete="off"
          autocapitalize="off" spellcheck="false">
   <p class="tenue" style="font-size:13px">🔤 Solo lettere e numeri, senza spazi.</p>
 
@@ -259,14 +281,16 @@
 
   </div>
   <div class="col-d">
-  <h1 style="font-size:18px;margin-top:0">🎬 Durante la registrazione</h1>
+  <!-- 25/10/2026 sera, Francesco: "togli" (schermata): tolti i disegni 'Come si registra una frase' e 'La luce' e la riga 'Poca luce' da questa pagina
+       (copia in index.html.prima_togli_disegni_25ott.bak). Restano i 3 disegnini sopra il video nella registrazione. -->
+  <h1 style="font-size:18px;margin-top:0">✅ Ricorda</h1>
   <div class="riquadro">
     <div class="icone grande">
       <div><i>🙌</i><span>Due mani libere</span></div>
       <div><i>📱</i><span>Telefono in verticale, fermo</span></div>
-      <div><i>🗣️</i><span>Segna naturale: bocca e viso come vengono</span></div>
-      <div><i>🐢</i><span>Non rallentare, non esagerare</span></div>
-      <div><i>👕</i><span>Maglietta a tinta unita</span></div>
+      <div><i>🗣️</i><span>Segna naturale, con bocca e viso</span></div>
+      <div><i>🐢</i><span>Velocità normale: non piano, non veloce</span></div>
+      <div><i>👕</i><span>Maglietta di un colore solo</span></div>
       <div><i>🤚</i><span>Mancino? Usa la tua mano di sempre</span></div>
     </div>
   </div>
@@ -295,6 +319,7 @@
   </div>
   <p class="tenue" style="margin:0;text-align:center">↻ Puoi fermarti e tornare</p>
   <div class="avviso" id="m-messaggio" style="display:none"></div>
+  <p class="avviso" id="coda-info" style="display:none"></p>
 
   <div class="riquadro parte p1">
     <div class="icona">✋</div>
@@ -382,7 +407,12 @@
     <div class="barra"><i id="barra-frasi"></i></div>
     <div class="conteggio" id="conteggio-frasi"></div>
   </div>
-  <p class="tenue" id="istruzioni-frase" style="display:none;font-size:15px;margin:0 0 8px;text-align:center">🙌⬆️ alza le mani = si parte &nbsp;·&nbsp; 🙌⬇️ abbassa = fine &nbsp;·&nbsp; ❓ domanda = faccia di domanda</p>
+  <!-- 25/10/2026, Francesco: "piu' immagini chiare": le tre cose da ricordare come piccoli disegni (prima: una riga di testo). raccolta.js la mostra solo nelle frasi. -->
+  <div class="striscia" id="istruzioni-frase" style="display:none">
+    <div><svg viewBox="0 0 100 112" aria-hidden="true"><rect x="30" y="50" width="40" height="58" rx="14" fill="#0a6572"/><circle cx="50" cy="32" r="15" fill="#f6d3b0" stroke="#06191b" stroke-width="3"/><path d="M34 58 L19 78 L30 58 M66 58 L81 78 L70 58" fill="none" stroke="#0a6572" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><circle cx="30" cy="55" r="7" fill="#f6d3b0" stroke="#06191b" stroke-width="2.4"/><circle cx="70" cy="55" r="7" fill="#f6d3b0" stroke="#06191b" stroke-width="2.4"/></svg>mani su<br>= segna</div>
+    <div><svg viewBox="0 0 100 112" aria-hidden="true"><rect x="30" y="50" width="40" height="58" rx="14" fill="#0a6572"/><circle cx="50" cy="32" r="15" fill="#f6d3b0" stroke="#06191b" stroke-width="3"/><path d="M34 58 L27 98 M66 58 L73 98" stroke="#0a6572" stroke-width="9" stroke-linecap="round"/><circle cx="27" cy="101" r="6.5" fill="#f6d3b0" stroke="#06191b" stroke-width="2.4"/><circle cx="73" cy="101" r="6.5" fill="#f6d3b0" stroke="#06191b" stroke-width="2.4"/><circle cx="84" cy="18" r="14" fill="#2e9d57"/><path d="M77 18 L82 23 L91 13" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>mani giù<br>= fine</div>
+    <div><svg viewBox="0 0 100 112" aria-hidden="true"><rect x="30" y="50" width="40" height="58" rx="14" fill="#0a6572"/><circle cx="50" cy="32" r="15" fill="#f6d3b0" stroke="#06191b" stroke-width="3"/><path d="M40 21 L48 18 M52 18 L60 21" stroke="#06191b" stroke-width="3" stroke-linecap="round"/><circle cx="44.5" cy="29" r="2.6" fill="#06191b"/><circle cx="55.5" cy="29" r="2.6" fill="#06191b"/><text x="84" y="30" font-size="32" font-weight="800" fill="#b45309" text-anchor="middle" font-family="system-ui,sans-serif">?</text></svg>domanda<br>= faccia ?</div>
+  </div>
   </div>
   <div class="col-video">
   <!-- Il video con sopra lo scheletro della mano. Vedere le linee verdi e i
@@ -427,6 +457,6 @@
   <button id="btn-ancora" class="secondario">Registra ancora</button>
 </div>
 
-<script type="module" src="raccolta.js?v=2610201051"></script>
+<script type="module" src="raccolta.js?v=2610250923"></script>
 </body>
 </html>
